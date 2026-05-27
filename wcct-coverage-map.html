@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>West Coast Carriers Coverage Map</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Arial, sans-serif; background: #ffffff; padding: 20px; }
+.legend { display: flex; gap: 20px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+.legend-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: #555555; }
+.legend-box { width: 13px; height: 13px; border-radius: 2px; }
+#map-container { width: 100%; border-radius: 6px; overflow: hidden; border: 1px solid #e0e0e0; }
+#info-panel { display: none; margin-top: 16px; background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 6px; padding: 20px 24px; }
+#info-header { display: flex; justify-content: space-between; align-items: flex-start; }
+#info-state { font-family: Oswald, Arial, sans-serif; font-size: 22px; font-weight: 700; color: #0a1628; margin-bottom: 4px; }
+#info-freq { font-size: 12px; color: #f16507; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px; }
+#info-intro { font-size: 13px; color: #666666; margin-bottom: 12px; }
+#info-services { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.service-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #333333; }
+.service-dot { width: 7px; height: 7px; border-radius: 50%; background: #f16507; flex-shrink: 0; }
+#info-footer { margin-top: 16px; padding-top: 16px; border-top: 1px solid #e0e0e0; font-size: 13px; color: #666666; }
+#info-footer a { color: #f16507; text-decoration: none; font-weight: 600; }
+#close-btn { font-size: 22px; background: none; border: none; cursor: pointer; color: #999999; padding: 0 0 0 20px; line-height: 1; }
+.canada-section { margin-top: 16px; background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 6px; padding: 20px 24px; }
+.canada-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.canada-bar { width: 4px; height: 22px; background: #f16507; border-radius: 2px; }
+.canada-title { font-family: Oswald, Arial, sans-serif; font-size: 15px; font-weight: 700; color: #0a1628; text-transform: uppercase; }
+.canada-note { font-size: 13px; color: #666666; margin-bottom: 16px; }
+.canada-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+.canada-card { background: #ffffff; border-radius: 4px; padding: 12px 14px; border: 1px solid #e0e0e0; border-left: 3px solid #f16507; }
+.canada-card-name { font-size: 13px; font-weight: 600; color: #0a1628; }
+.canada-card-city { font-size: 11px; color: #888888; margin-top: 2px; }
+.canada-card-tag { font-size: 11px; color: #f16507; margin-top: 4px; font-weight: 600; }
+.stats-grid { margin-top: 16px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.stat-box { background: #f8f9fa; border-radius: 6px; padding: 16px; border: 1px solid #e0e0e0; text-align: center; }
+.stat-number { font-family: Oswald, Arial, sans-serif; font-size: 28px; font-weight: 700; color: #f16507; }
+.stat-label { font-size: 11px; color: #888888; text-transform: uppercase; letter-spacing: 0.06em; margin-top: 4px; }
+</style>
+</head>
+<body>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-box" style="background:#a33500;"></div>High-frequency origin states</div>
+  <div class="legend-item"><div class="legend-box" style="background:#f16507;"></div>Weekly scheduled service</div>
+  <div class="legend-item"><div class="legend-box" style="background:#ffd0a8;border:1px solid #f0c090;"></div>Available — contact us to schedule</div>
+</div>
+
+<div id="map-container"></div>
+
+<div id="info-panel">
+  <div id="info-header">
+    <div style="flex:1;">
+      <div id="info-state"></div>
+      <div id="info-freq"></div>
+      <div id="info-intro">West Coast Carriers provides the following services to and from this state:</div>
+      <div id="info-services"></div>
+    </div>
+    <button id="close-btn" onclick="document.getElementById('info-panel').style.display='none'">×</button>
+  </div>
+  <div id="info-footer">
+    Call <strong style="color:#0a1628;">(253) 212-9950</strong> or <a href="https://www.westcoastcarriers.net/freightquote/" target="_blank">request a quote online</a> to book your shipment.
+  </div>
+</div>
+
+<div class="canada-section">
+  <div class="canada-header">
+    <div class="canada-bar"></div>
+    <div class="canada-title">Canada — Cross-Border Service To and From the United States</div>
+  </div>
+  <p class="canada-note">We move freight between US states and Canadian provinces. We do not provide Canada-to-Canada domestic service.</p>
+  <div class="canada-grid">
+    <div class="canada-card"><div class="canada-card-name">British Columbia</div><div class="canada-card-city">Vancouver metro</div><div class="canada-card-tag">US ↔ BC</div></div>
+    <div class="canada-card"><div class="canada-card-name">Ontario</div><div class="canada-card-city">Toronto metro</div><div class="canada-card-tag">US ↔ ON</div></div>
+    <div class="canada-card"><div class="canada-card-name">Alberta</div><div class="canada-card-city">Calgary / Edmonton</div><div class="canada-card-tag">US ↔ AB</div></div>
+    <div class="canada-card"><div class="canada-card-name">Saskatchewan</div><div class="canada-card-city">Regina / Saskatoon</div><div class="canada-card-tag">US ↔ SK</div></div>
+    <div class="canada-card"><div class="canada-card-name">Manitoba</div><div class="canada-card-city">Winnipeg metro</div><div class="canada-card-tag">US ↔ MB</div></div>
+  </div>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-box"><div class="stat-number">1,210</div><div class="stat-label">Dedicated Carriers</div></div>
+  <div class="stat-box"><div class="stat-number">48</div><div class="stat-label">States Served</div></div>
+  <div class="stat-box"><div class="stat-number">Weekly</div><div class="stat-label">Scheduled Departures</div></div>
+  <div class="stat-box"><div class="stat-number">5 Provinces</div><div class="stat-label">Canada Cross-Border</div></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+var highFreq = new Set(['California','Washington','Oregon','Texas','Virginia','New York','New Jersey']);
+var weekly = new Set(['California','Washington','Oregon','Arizona','Texas','New Jersey','Pennsylvania','Florida','Tennessee','South Carolina','Delaware','Colorado','Illinois','Michigan','Indiana','Ohio','Minnesota','Wisconsin','Kansas','Utah','Virginia','New York','Oklahoma','Kentucky','Nevada','Massachusetts','Rhode Island','North Carolina','Maryland','Iowa','Missouri','Arkansas','Alabama','Georgia','Louisiana','Mississippi']);
+var serviceList = ['Full truckload (FTL)','Less-than-truckload (LTL)','Refrigerated / reefer','Flatbed & step deck','Dry van','Power only','Heavy haul','Expedited / time-critical'];
+
+function getFreqLabel(name) {
+  if (highFreq.has(name)) return 'High-frequency origin state — multiple weekly departures';
+  if (weekly.has(name)) return 'Weekly scheduled service available';
+  return 'Nationwide service available — contact us to schedule';
+}
+function getFill(name) {
+  if (highFreq.has(name)) return '#a33500';
+  if (weekly.has(name)) return '#f16507';
+  return '#ffd0a8';
+}
+
+var width = 900, height = 520;
+var svg = d3.select('#map-container').append('svg')
+  .attr('viewBox','0 0 '+width+' '+height)
+  .attr('width','100%')
+  .style('background','#fff3e8');
+
+var projection = d3.geoAlbersUsa().scale(1050).translate([width/2, height/2]);
+var geoPath = d3.geoPath(projection);
+
+d3.json('https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json').then(function(us) {
+  var features = topojson.feature(us, us.objects.states).features;
+  svg.selectAll('path').data(features).join('path')
+    .attr('d', geoPath)
+    .attr('fill', function(d){ return getFill(d.properties.name); })
+    .attr('stroke','#ffffff')
+    .attr('stroke-width', 0.8)
+    .style('cursor','pointer')
+    .on('mouseover', function(){ d3.select(this).attr('fill','#fbbf24'); })
+    .on('mouseout', function(event,d){ d3.select(this).attr('fill', getFill(d.properties.name)); })
+    .on('click', function(event,d){
+      var name = d.properties.name;
+      document.getElementById('info-state').textContent = name;
+      document.getElementById('info-freq').textContent = getFreqLabel(name);
+      document.getElementById('info-services').innerHTML = serviceList.map(function(s){
+        return '<div class="service-item"><span class="service-dot"></span>'+s+'</div>';
+      }).join('');
+      document.getElementById('info-panel').style.display = 'block';
+      document.getElementById('info-panel').scrollIntoView({behavior:'smooth',block:'nearest'});
+    });
+  svg.append('text').attr('x',14).attr('y',20).attr('fill','rgba(80,30,0,0.4)').attr('font-size','12px').text('Click any state for service details');
+});
+</script>
+</body>
+</html>
